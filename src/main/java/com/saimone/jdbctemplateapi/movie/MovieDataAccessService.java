@@ -1,5 +1,6 @@
 package com.saimone.jdbctemplateapi.movie;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -7,12 +8,9 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
+@RequiredArgsConstructor
 public class MovieDataAccessService implements MovieDao {
     private final JdbcTemplate jdbcTemplate;
-
-    public MovieDataAccessService(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
 
     @Override
     public List<Movie> selectAllMovies() {
