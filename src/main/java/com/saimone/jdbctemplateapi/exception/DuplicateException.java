@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(value = HttpStatus.BAD_REQUEST)
 public class DuplicateException extends RuntimeException{
-    DuplicateException(String message) {
+    public DuplicateException(String message) {
         super(message);
     }
 }

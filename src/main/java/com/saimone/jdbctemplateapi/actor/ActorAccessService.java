@@ -61,4 +61,15 @@ public class ActorAccessService implements ActorDao {
                 """;
         jdbcTemplate.update(sql, id);
     }
+
+    @Override
+    public List<Actor> findActorsWithName(String name) {
+        var sql = """
+                SELECT id, name
+                FROM actor
+                WHERE name = ?
+                LIMIT 100;
+                """;
+        return jdbcTemplate.query(sql, new ActorRowMapper(), name);
+    }
 }
