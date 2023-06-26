@@ -1,7 +1,12 @@
 package com.saimone.jdbctemplateapi.movie;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface MovieDao {
-    List<Movie> selectMovies();
+    List<Movie> selectAllMovies();
+    Optional<Movie> selectMovieById(Integer id);
+    void insertNewMovie(Movie movie);
+    void updateMovie(Integer id, Movie updatedMovie);
+    void deleteMovie(Integer id);
 }
