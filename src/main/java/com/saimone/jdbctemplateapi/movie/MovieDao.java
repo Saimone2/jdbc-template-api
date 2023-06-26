@@ -9,4 +9,5 @@ public interface MovieDao {
     void insertNewMovie(Movie movie);
     void updateMovie(Integer id, Movie updatedMovie);
     void deleteMovie(Integer id);
+    List<Movie> movieListByActorId(Integer id);
 }

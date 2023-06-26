@@ -61,4 +61,16 @@ public class MovieDataAccessService implements MovieDao {
                 """;
         jdbcTemplate.update(sql, id);
     }
+
+    @Override
+    public List<Movie> movieListByActorId(Integer id) {
+        var sql = """
+                SELECT movie.id, movie.name, movie.release_date
+                FROM movie
+                INNER JOIN actor_movie on movie.id = actor_movie.moveid
+                INNER JOIN actor on actor_movie.actorid = actor.id
+                WHERE actor.id = ?;
+                """;
+        return jdbcTemplate.query(sql, new MovieRowMapper(), id);
+    }
 }
