@@ -10,4 +10,7 @@ public interface MovieDao {
     void updateMovie(Integer id, Movie updatedMovie);
     void deleteMovie(Integer id);
     List<Movie> movieListByActorId(Integer id);
+    List<Movie> findSameMovies(Movie movie);
+    void connectActorToMovie(Integer moveId, Integer actorId);
+    void deleteOldConnections(Integer id);
 }

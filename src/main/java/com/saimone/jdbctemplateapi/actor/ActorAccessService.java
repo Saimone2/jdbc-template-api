@@ -56,14 +56,40 @@ public class ActorAccessService implements ActorDao {
     @Override
     public void deleteActor(Integer id) {
         var sql = """
+                DELETE FROM actor_movie
+                WHERE actorid = ?;
                 DELETE FROM actor
                 WHERE id = ?;
                 """;
-        jdbcTemplate.update(sql, id);
+        jdbcTemplate.update(sql, id, id);
     }
 
     @Override
-    public List<Actor> findActorsWithName(String name) {
+    public List<Actor> actorListByMovieId(Integer id) {
+        var sql = """
+                SELECT actor.id, actor.name
+                FROM movie
+                INNER JOIN actor_movie on movie.id = actor_movie.moveid
+                INNER JOIN actor on actor_movie.actorid = actor.id
+                WHERE movie.id = ?;
+                """;
+        return jdbcTemplate.query(sql, new ActorRowMapper(), id);
+    }
+
+    @Override
+    public Optional<Actor> findActorByName(String name) {
+        var sql = """
+                SELECT id, name
+                FROM actor
+                WHERE name = ?
+                """;
+        return jdbcTemplate.query(sql, new ActorRowMapper(), name)
+                .stream()
+                .findFirst();
+    }
+
+    @Override
+    public List<Actor> findSameActors(String name) {
         var sql = """
                 SELECT id, name
                 FROM actor

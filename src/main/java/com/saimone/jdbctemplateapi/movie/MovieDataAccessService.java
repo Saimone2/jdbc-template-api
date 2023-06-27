@@ -27,7 +27,7 @@ public class MovieDataAccessService implements MovieDao {
         var sql = """
                 SELECT id, name, release_date
                 FROM movie
-                WHERE id = ?
+                WHERE id = ?;
                 """;
         return jdbcTemplate.query(sql, new MovieRowMapper(), id)
                 .stream()
@@ -56,10 +56,12 @@ public class MovieDataAccessService implements MovieDao {
     @Override
     public void deleteMovie(Integer id) {
         var sql = """
+                DELETE FROM actor_movie
+                WHERE moveid = ?;
                 DELETE FROM movie
-                WHERE id = ?
+                WHERE id = ?;
                 """;
-        jdbcTemplate.update(sql, id);
+        jdbcTemplate.update(sql, id, id);
     }
 
     @Override
@@ -72,5 +74,34 @@ public class MovieDataAccessService implements MovieDao {
                 WHERE actor.id = ?;
                 """;
         return jdbcTemplate.query(sql, new MovieRowMapper(), id);
+    }
+
+    @Override
+    public List<Movie> findSameMovies(Movie movie) {
+        var sql = """
+                SELECT id, name, release_date
+                FROM movie
+                WHERE name = ? AND release_date = ?
+                LIMIT 100;
+                """;
+        return jdbcTemplate.query(sql, new MovieRowMapper(), movie.getName(), movie.getReleaseDate());
+    }
+
+    @Override
+    public void connectActorToMovie(Integer movieId, Integer actorId) {
+        var sql = """
+                INSERT INTO actor_movie(moveid, actorid)
+                VALUES (?, ?);
+                """;
+        jdbcTemplate.update(sql, movieId, actorId);
+    }
+
+    @Override
+    public void deleteOldConnections(Integer id) {
+        var sql = """
+                DELETE FROM actor_movie
+                WHERE moveid = ?;
+                """;
+        jdbcTemplate.update(sql, id);
     }
 }

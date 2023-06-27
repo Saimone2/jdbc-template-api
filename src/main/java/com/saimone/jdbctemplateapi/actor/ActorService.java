@@ -23,7 +23,7 @@ public class ActorService {
             throw new NotFoundException("IN selectAllActors - no actors found");
         }
         List<Actor> completedActors = new ArrayList<>();
-        for(Actor actor : actorDao.selectAllActors()) {
+        for(Actor actor : actors) {
             completedActors.add(addMoviesInfo(actor));
         }
         return completedActors;
@@ -36,7 +36,7 @@ public class ActorService {
     }
 
     public void addNewActor(Actor actor) {
-        List<Actor> actors = actorDao.findActorsWithName(actor.getName());
+        List<Actor> actors = actorDao.findSameActors(actor.getName());
         if (actors == null || actors.isEmpty()) {
             actorDao.insertNewActor(actor);
         } else {
@@ -47,7 +47,7 @@ public class ActorService {
     public void updateActor(Integer id, Actor updatedActor) {
         Optional<Actor> actor = actorDao.selectActorById(id);
         actor.ifPresentOrElse((e) -> {
-            List<Actor> duplicateActors = actorDao.findActorsWithName(updatedActor.getName());
+            List<Actor> duplicateActors = actorDao.findSameActors(updatedActor.getName());
             if(duplicateActors == null || duplicateActors.isEmpty()) {
                 actorDao.updateActor(id, updatedActor);
             } else {
